@@ -1,5 +1,5 @@
 include ':MonitorNetLib'
-include ':OkHttpPlugin'
+//include ':OkHttpPlugin'
 include ':MonitorCrashLib'
 include ':app'
 include ':MonitorAnrLib'

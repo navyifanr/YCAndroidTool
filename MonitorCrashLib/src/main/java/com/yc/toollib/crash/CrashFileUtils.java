@@ -94,7 +94,7 @@ public final class CrashFileUtils {
         }
         //组合Android相关信息
         StringBuilder sb = new StringBuilder();
-        sb.append("\n软件App的Id:").append(BuildConfig.APPLICATION_ID);
+        sb.append("\n软件App的Id:").append(context.getPackageName());
         sb.append("\n是否是DEBUG版本:").append(BuildConfig.BUILD_TYPE);
         sb.append("\n崩溃的时间:").append(crashTime);
         sb.append("\n是否root:").append(NetDeviceUtils.isDeviceRooted());
@@ -311,9 +311,9 @@ public final class CrashFileUtils {
         String now = dataFormat.format(new Date());
         sb.append("TIME:").append(now);//崩溃时间
         //程序信息
-        sb.append("\nAPPLICATION_ID:").append(BuildConfig.APPLICATION_ID);//软件APPLICATION_ID
-        sb.append("\nVERSION_CODE:").append(BuildConfig.VERSION_CODE);//软件版本号
-        sb.append("\nVERSION_NAME:").append(BuildConfig.VERSION_NAME);//VERSION_NAME
+        sb.append("\nAPPLICATION_ID:").append(context.getPackageName());//软件APPLICATION_ID
+        sb.append("\nVERSION_CODE:").append(getVersionCode(context));//软件版本号
+        sb.append("\nVERSION_NAME:").append(getVersionName(context));//VERSION_NAME
         sb.append("\nBUILD_TYPE:").append(BuildConfig.BUILD_TYPE);//是否是DEBUG版本
         //设备信息
         sb.append("\nMODEL:").append(Build.MODEL);
@@ -356,5 +356,42 @@ public final class CrashFileUtils {
         }
         return path;
     }
+
+    /**
+     * 获取当前apk的版本号
+     *
+     * @param mContext
+     * @return
+     */
+    public static int getVersionCode(Context mContext) {
+        int versionCode = 0;
+        try {
+            //获取软件版本号，对应AndroidManifest.xml下android:versionCode
+            versionCode = mContext.getPackageManager().
+                    getPackageInfo(mContext.getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return versionCode;
+    }
+
+    /**
+     * 获取当前apk的版本名
+     *
+     * @param context 上下文
+     * @return
+     */
+    public static String getVersionName(Context context) {
+        String versionName = "";
+        try {
+            //获取软件版本号，对应AndroidManifest.xml下android:versionName
+            versionName = context.getPackageManager().
+                    getPackageInfo(context.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return versionName;
+    }
+
 
 }
